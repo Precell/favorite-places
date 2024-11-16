@@ -1,12 +1,21 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text, Pressable, StyleSheet } from "react-native";
+import React from "react";
 
-const PlaceItem = () => {
+const PlaceItem = ({ place, onSelect}) => {
   return (
-    <View>
-      <Text>PlaceItem</Text>
-    </View>
-  )
-}
+    <Pressable onPress={onSelect}>
+      <Image source={{uri:place.imageUri}}/>
+      <View>
+        <Text>{place.title}</Text>
+        <Text>{place.address}</Text>
+      </View>
+    </Pressable>
+  );
+};
 
-export default PlaceItem
+export default PlaceItem;
+
+
+const styles = StyleSheet.create({
+
+})
