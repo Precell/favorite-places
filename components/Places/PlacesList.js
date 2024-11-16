@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     fallbackContainer:{
         flex:1,
         justifyContent:'center',
-        alignItems:'center',
+        alignItems:'center'
     },
     fallbactText:{
         fontSize:16,
