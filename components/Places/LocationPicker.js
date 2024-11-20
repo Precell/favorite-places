@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Alert, Image } from "react-native";
-import React, { useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import OutlinedButton from "../ui/OutlinedButton";
 import { Colors } from "../../constants/colors";
 
@@ -9,33 +9,36 @@ import {
   PermissionStatus,
 } from "expo-location";
 
-
 import { getMapPreview } from "../../utils/location";
-import { useNavigation, useRoute, useIsFocused } from "@react-navigation/native";
+import {
+  useNavigation,
+  useRoute,
+  useIsFocused,
+} from "@react-navigation/native";
 
-const LocationPicker = () => {
-
+const LocationPicker = ({ onPicklocation }) => {
   const [pickedLocation, setPickedLocation] = useState(null);
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const route = useRoute();
-  const [locationPermissionInformation, requestPermission] = useForegroundPermissions();
+  const [locationPermissionInformation, requestPermission] =
+    useForegroundPermissions();
 
-
-  
-  useEffect(() =>{
-
+  useEffect(() => {
     if (isFocused && route.params) {
-      
-      const mapPickedLocation = {lat: route.params.pickedlat, lng: route.params.pickedlng}
-      console.log(mapPickedLocation, 'mapPickedLocation');
-      setPickedLocation(mapPickedLocation)
+      const mapPickedLocation = {
+        lat: route.params.pickedlat,
+        lng: route.params.pickedlng,
+      };
+      // console.log(mapPickedLocation, "mapPickedLocation");
+      setPickedLocation(mapPickedLocation);
     }
-    
-      
-    }, [route, isFocused]);
+  }, [route, isFocused]);
 
 
+  useEffect(() => {
+    onPicklocation(pickedLocation);
+  }, [pickedLocation, onPicklocation]);
 
   async function verifyPermissions(params) {
     if (
@@ -65,7 +68,7 @@ const LocationPicker = () => {
     }
 
     const location = await getCurrentPositionAsync({ accuracy: 6 });
-    
+
     setPickedLocation({
       lat: location.coords.latitude,
       lng: location.coords.longitude,
