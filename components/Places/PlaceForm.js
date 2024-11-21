@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     },
     input:{
         marginVertical:8,
-        paddoingHorizontal:4,
+        paddingHorizontal:4,
         paddingVertical:8,
         fontSize:16,
         borderBottomColor: Colors.primary700,
