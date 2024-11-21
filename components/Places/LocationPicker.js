@@ -9,7 +9,7 @@ import {
   PermissionStatus,
 } from "expo-location";
 
-import { getMapPreview } from "../../utils/location";
+import { getAddress, getMapPreview } from "../../utils/location";
 import {
   useNavigation,
   useRoute,
@@ -35,9 +35,15 @@ const LocationPicker = ({ onPicklocation }) => {
     }
   }, [route, isFocused]);
 
-
   useEffect(() => {
-    onPicklocation(pickedLocation);
+    async function handleLocation(params) {
+      if (pickedLocation) {
+       const address = await getAddress(pickedLocation.lat, pickedLocation.lng);
+        onPicklocation({...pickedLocation, address});
+      }
+    }
+
+    handleLocation()
   }, [pickedLocation, onPicklocation]);
 
   async function verifyPermissions(params) {
