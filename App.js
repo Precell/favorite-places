@@ -9,9 +9,10 @@ import { Colors } from "./constants/colors";
 import IconButton from "./components/ui/IconButton";
 import { useEffect, useState } from "react";
 import { init } from "./utils/database";
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from "expo-splash-screen";
 
 const Stack = createNativeStackNavigator();
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
 
@@ -19,16 +20,20 @@ export default function App() {
 
   useEffect(() =>{
     init().then(() =>{
-      setDbInitialized(true)
+      setDbInitialized(true);
+      SplashScreen.hideAsync();
+      console.log("Database initialized");
+      
     }).catch((err) =>{
       console.log(err);
+      SplashScreen.hideAsync();
       
     })
   },[])
 
 
   if(!dbInitialized){
-    <AppLoading/>
+    return null;
   }
 
 
