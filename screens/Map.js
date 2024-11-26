@@ -4,11 +4,16 @@ import { View, Text, StyleSheet, Alert } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import IconButton from "../components/ui/IconButton";
 
-const Map = ({ navigation }) => {
-  const [selectedLocation, setSelectedLocation] = useState();
+const Map = ({ navigation, route }) => {
+  const initialLocation = route.params && {
+    lat: route.params.initialLat,
+    lng: route.params.initialLng,
+  };
+  const [selectedLocation, setSelectedLocation] = useState(initialLocation);
+
   const region = {
-    latitude: -17.8183114,
-    longitude: 31.067429143,
+    latitude: initialLocation ? initialLocation.lat : -17.8183114,
+    longitude: initialLocation ? initialLocation.lng : 31.067429143,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
@@ -24,32 +29,39 @@ const Map = ({ navigation }) => {
     });
   }
 
-  const  savedPickedLocationHandler = useCallback((params) => {
-    if (!selectedLocation) {
-      Alert.alert(
-        "No location picked ",
-        "You have to pick a location (by tapping on the map) first"
-      );
-      return;
-    }
+  const savedPickedLocationHandler = useCallback(
+    (params) => {
+      if (!selectedLocation) {
+        Alert.alert(
+          "No location picked ",
+          "You have to pick a location (by tapping on the map) first"
+        );
+        return;
+      }
 
-    navigation.navigate("AddPlace", {
-      pickedlat: selectedLocation.lat,
-      pickedlng: selectedLocation.lng,
-    });
-  }, [navigation, selectedLocation])
+      navigation.navigate("AddPlace", {
+        pickedlat: selectedLocation.lat,
+        pickedlng: selectedLocation.lng,
+      });
+    },
+    [navigation, selectedLocation]
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: ({ tintColor }) =>   <IconButton
+      headerRight: ({ tintColor }) => {
+        if (initialLocation) {
+          return;
+        }
+        <IconButton
           icon="save"
           size={24}
           color={tintColor}
           onPress={savedPickedLocationHandler}
-        />
-     
+        />;
+      },
     });
-  }, [navigation, savedPickedLocationHandler]);
+  }, [navigation, savedPickedLocationHandler. initialLocation]);
 
   return (
     <MapView
